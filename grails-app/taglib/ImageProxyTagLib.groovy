@@ -10,7 +10,6 @@ class ImageProxyTagLib {
         if (!location) {
             location = "web-app/images/imgProxy"
         }
-        pageScope.location = location
 
         def weblocation = attrs.remove('webloc')
         if (!weblocation) {
@@ -19,6 +18,14 @@ class ImageProxyTagLib {
         if (!weblocation) {
             weblocation = "images/imgProxy"
         }
+		
+		def subdir = attrs.remove('subdir')
+		if (subdir) {
+			location += "/" + subdir
+			weblocation += "/" + subdir
+		}
+		
+		pageScope.location = location
         pageScope.weblocation = weblocation
 
         def serverurl = attrs.remove('serverurl')
@@ -28,7 +35,8 @@ class ImageProxyTagLib {
         if (!serverurl) {
             serverurl = "http://localhost:8080/"
         }
-        pageScope.serverurl = serverurl
+		
+		pageScope.serverurl = serverurl
 
         out << body()
     }
@@ -63,9 +71,11 @@ class ImageProxyTagLib {
         def onkeyup = attrs.remove('onkeyup')
 
         File indir = new File(pageScope.location)
-        indir.mkdir()
+		if(!indir.exists()) 
+			indir.mkdirs()
+			
         File file = new File(indir.getPath() + File.separator + name + "." + type)
-
+				
         if (!file.exists()) {
             file.createNewFile();
             use (FileBinaryCategory)
@@ -74,7 +84,7 @@ class ImageProxyTagLib {
             }
         }
 
-        def parameters = "src=\"" + pageScope.serverurl + pageScope.weblocation + File.separator + file.getName()+"\""
+        def parameters = "src=\"" + pageScope.serverurl + pageScope.weblocation + "/" + file.getName()+"\""
         parameters += alt ? " alt=\""+alt+"\"" : ""
         parameters += id ? " id=\""+id+"\"" : ""
         parameters += title ? " title=\""+title+"\"" : ""
@@ -100,4 +110,3 @@ class ImageProxyTagLib {
         out << "<img "+parameters+" />"
     }
 }
-
