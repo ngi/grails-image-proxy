@@ -1,6 +1,6 @@
 class ImageProxyGrailsPlugin {
 	def name = "image-proxy"
-    def version = "0.2.1"
+    def version = "0.2.2"
     def dependsOn = [:]
 
     // TODO Fill in these fields
