@@ -38,6 +38,7 @@ class ImageProxyTagLib {
 		
 		pageScope.serverurl = serverurl
 
+		
         out << body()
     }
 
@@ -69,44 +70,54 @@ class ImageProxyTagLib {
         def onkeypress = attrs.remove('onkeypress')
         def onkeydown = attrs.remove('onkeydown')
         def onkeyup = attrs.remove('onkeyup')
-
+	
         File indir = new File(pageScope.location)
 		if(!indir.exists()) 
 			indir.mkdirs()
 			
         File file = new File(indir.getPath() + File.separator + name + "." + type)
-				
-        if (!file.exists()) {
-            file.createNewFile();
-            use (FileBinaryCategory)
-            {
-                file << src.toURL()
-            }
-        }
-
-        def parameters = "src=\"" + pageScope.serverurl + pageScope.weblocation + "/" + file.getName()+"\""
-        parameters += alt ? " alt=\""+alt+"\"" : ""
-        parameters += id ? " id=\""+id+"\"" : ""
-        parameters += title ? " title=\""+title+"\"" : ""
-        parameters += lang ? " lang=\""+lang+"\"" : ""
-        parameters += style ? " style=\""+style+"\"" : ""
-        parameters += width ? " width=\""+width+"\"" : ""
-        parameters += height ? " height=\""+height+"\"" : ""
-        parameters += ismap ? " ismap=\""+ismap+"\"" : ""
-        parameters += longdesc ? " longdesc=\""+longdesc+"\"" : ""
-        parameters += usemap ? " usemap=\""+usemap+"\"" : ""
-
-        parameters += onclick ? " onclick=\""+onclick+"\"" : ""
-        parameters += ondblclick ? " ondblclick=\""+ondblclick+"\"" : ""
-        parameters += onmousedown ? " onmousedown=\""+onmousedown+"\"" : ""
-        parameters += onmoouseup ? " onmoouseup=\""+onmoouseup+"\"" : ""
-        parameters += onmouseover ? " onmouseover=\""+onmouseover+"\"" : ""
-        parameters += onmousemove ? " onmousemove=\""+onmousemove+"\"" : ""
-        parameters += onmouseout ? " onmouseout=\""+onmouseout+"\"" : ""
-        parameters += onkeypress ? " onkeypress=\""+onkeypress+"\"" : ""
-        parameters += onkeydown ? " onkeydown=\""+onkeydown+"\"" : ""
-        parameters += onkeyup ? " onkeyup=\""+onkeyup+"\"" : ""
-
-        out << "<img "+parameters+" />"
+		try 
+		{		
+	        if (!file.exists()) {
+	            file.createNewFile();
+	            use (FileBinaryCategory)
+	            {
+	                file << src.toURL()
+	            }
+	        }
+			
+			def parameters = "src=\"" + pageScope.serverurl + pageScope.weblocation + "/" + file.getName()+"\""
+			parameters += alt ? " alt=\""+alt+"\"" : ""
+			parameters += id ? " id=\""+id+"\"" : ""
+			parameters += title ? " title=\""+title+"\"" : ""
+			parameters += lang ? " lang=\""+lang+"\"" : ""
+			parameters += style ? " style=\""+style+"\"" : ""
+			parameters += width ? " width=\""+width+"\"" : ""
+			parameters += height ? " height=\""+height+"\"" : ""
+			parameters += ismap ? " ismap=\""+ismap+"\"" : ""
+			parameters += longdesc ? " longdesc=\""+longdesc+"\"" : ""
+			parameters += usemap ? " usemap=\""+usemap+"\"" : ""
+	
+			parameters += onclick ? " onclick=\""+onclick+"\"" : ""
+			parameters += ondblclick ? " ondblclick=\""+ondblclick+"\"" : ""
+			parameters += onmousedown ? " onmousedown=\""+onmousedown+"\"" : ""
+			parameters += onmoouseup ? " onmoouseup=\""+onmoouseup+"\"" : ""
+			parameters += onmouseover ? " onmouseover=\""+onmouseover+"\"" : ""
+			parameters += onmousemove ? " onmousemove=\""+onmousemove+"\"" : ""
+			parameters += onmouseout ? " onmouseout=\""+onmouseout+"\"" : ""
+			parameters += onkeypress ? " onkeypress=\""+onkeypress+"\"" : ""
+			parameters += onkeydown ? " onkeydown=\""+onkeydown+"\"" : ""
+			parameters += onkeyup ? " onkeyup=\""+onkeyup+"\"" : ""
+	
+			out << "<img "+parameters+" />"
+			
+		} 
+		catch (Exception e) 
+		{
+			log.error e
+			def error = (e.getMessage().size() > 100)?(e.getMessage()[0..97]+"..."):e.getMessage()
+			out << "<div style=\"height: "+height+"; width: "+width+"; background-color: #000000; overflow-y: auto\"><div style=\"color: #FFFFFF; font-weight: bold; margin: 50px 0px; text-align: center;\">"+error+"</div></div>"
+		}
     }
 }
+

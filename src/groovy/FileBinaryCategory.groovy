@@ -1,3 +1,6 @@
+import java.io.File;
+import java.net.URL;
+
 class FileBinaryCategory
 {
   def static leftShift(File a_file, URL a_url)
@@ -12,6 +15,10 @@ class FileBinaryCategory
 
       output << input
     }
+	catch (Exception e)
+	{
+		throw e
+	}
     finally
     {
        input?.close()
