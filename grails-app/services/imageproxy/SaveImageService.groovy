@@ -50,14 +50,14 @@ class SaveImageService {
 		try
 		{
 			if (!file.exists()) {
-				file.createNewFile();
+				file.createNewFile()
 				use (FileBinaryCategory)
 				{
 					file << src.toURL()
 				}
 			}
 		} catch (Exception e) {
-			// ignore
+			file.delete()
 		}
 	}
 }
