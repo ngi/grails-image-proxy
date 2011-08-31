@@ -4,3 +4,5 @@
 .classpath
 .project
 .settings/**/*
+
+.settings/org.eclipse.wst.common.project.facet.core.xml
