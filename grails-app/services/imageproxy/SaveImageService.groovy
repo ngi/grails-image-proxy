@@ -50,6 +50,8 @@ class SaveImageService {
 		try {
 			if (file.exists()) {
 				if (file.size() == 0) {
+					file.delete()
+					log.warn file.toString()+" is zero sized, so deleted"
 					file.createNewFile();
 					use (FileBinaryCategory) {
 						file << src.toURL()
@@ -63,9 +65,11 @@ class SaveImageService {
 				}
 			}
 			if (file.size() == 0) {
+				log.warn file.toString()+" is zero sized, so deleted"
 				file.delete()
 			}
 		} catch (Exception e) {
+			log.error e
 			file.delete()
 		}
 	}
